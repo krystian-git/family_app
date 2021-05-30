@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title> Family Web </title> 
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- connect bootstrap 5 alpha! -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js" integrity="sha384-DBjhmceckmzwrnMMrjI7BvG2FmRuxQVaTfFYHgfnrdfqMhxKt445b7j3KBQLolRl" crossorigin="anonymous"></script>
+    <!-- connect our css file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}", type="text/css">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    
+    <style>
+      body {
+        background-image: url("../static/Beautiful_hd.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      .col-md-4 {
+        -webkit-box-shadow: 0px -1px 39px 27px rgba(0,0,0,0.77);
+        -moz-box-shadow: 0px -1px 39px 27px rgba(0,0,0,0.77);
+        box-shadow: 0px -1px 39px 27px rgba(0,0,0,0.77);
+      }
+    </style>
+  </head>
+    
+  <body >
+    <div class="container">
+      <div class="row">
+          
+        <!-- Container for login form-->
+        <div class="col-md-12 min-vh-100 d-flex justify-content-center align-items-center">
+            
+          <!-- Login Form -->
+          <form method="POST" class="col-md-4 col-xs-12 p-5 text-center text-white rounded-lg">
+          {{ form.hidden_tag() }}
+            {% with messages = get_flashed_messages(with_categories=True) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert text-dark bg-warning alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+           
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn btn-block btn-success mt-4">Submit</button>
+          </form>
+        </div>
+      </div> 
+    </div>
+  </body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+      
+    <title> Family Web </title> 
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- connect bootstrap 5 alpha! -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" 
+        integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js" integrity="sha384-DBjhmceckmzwrnMMrjI7BvG2FmRuxQVaTfFYHgfnrdfqMhxKt445b7j3KBQLolRl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css" crossorigin="anonymous">
+    <!-- connect our css file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}", type="text/css">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    
+  </head>
+
+  <body style="min-height: 100%; padding-bottom: 50px;">
+     
+    <header class="site-header">
+      <!-- expandable navbar -->
+      <nav class="navbar navbar-expand-md navbar-dark">
+
+        <a class="navbar-brand ml-3" style="font-family: 'Times New Roman'; font-size: x-large;" href="/">Family Organizer</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Nawigacja">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+          
+        <div class="collapse navbar-collapse" id="mainmenu">
+          <!-- Left nav -->
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('todo')}}">Todo</a>
+            </li>
+
+            <!-- Restricted view for ADMIN or PARENT ONLY -->
+            {% if current_user.has_role('Admin') or current_user.has_role('Parent') %}    
+              <li class="nav-item">
+                <a class="nav-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">Cost Calculator</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{{url_for('bilgoraj_cost')}}">Biłgoraj House</a>
+                  <a class="dropdown-item" href="{{url_for('rzeszow_cost')}}">Rzeszow Apartament</a>
+                  <a class="dropdown-item" href="{{url_for('price_compare')}}">Price Compare</a>
+                </div>
+              </li>
+            {% endif %}
+            <!-- End of Restricted view for ADMIN ONLY -->
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('news')}}">News</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Next Projects</a>
+            </li>
+
+            <!-- Restricted view for ADMIN or PARENT ONLY -->
+            {% if current_user.has_role('Admin') or current_user.has_role('Parent') %}    
+              <li class="nav-item ">
+                <a class="nav-link" href="{{ url_for('movies_to_watch') }}">Movies</a>
+              </li>
+            {% endif %}
+            <!-- End of Restricted view for ADMIN ONLY -->
+            <li class="dropdown-divider"></li>
+          </ul>
+
+          <!-- Right nav -->
+          <ul class="navbar-nav ml-auto">
+
+            <!-- Restricted view for ADMIN ONLY -->
+            {% if current_user.has_role('Admin') %}    
+              <li class="nav-item border-right">
+                <a class="nav-link" href="{{url_for('settings')}}">Settings</a>
+              </li>
+            {% endif %}
+            <!-- End of Restricted view for ADMIN ONLY -->
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('logout')}}">Logout
+                <span class="badge badge-primary align-top">{{current_user.name}}</span>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+          
+      </nav>
+
+    </header>
+      
+    <main>
+
+      <!-- Main Container -->
+      <div class="container">
+          
+        <div class="row">
+            
+          <!-- Displaying flashed messages -->
+          <div class="col-12 mx-auto text-center">
+            {% with messages = get_flashed_messages(with_categories=True) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+          </div>
+          
+          <div class="col-12 mx-auto text-center p-0">          
+            {% block content %}
+            {% endblock content %}
+          </div>
+
+        </div>  
+      </div>
+    </main>  
+  </body>
+</html>

@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-6 p-3">
+    <h6>PLN/Currency ratio</h6>
+    <table class="bg-light table-bordered mx-auto" style="font-size: small;">
+      <thead>
+        <th class="p-2">Currency</th>
+        <th class="p-2">Value in PLN</th>
+      </thead>
+      <tbody>
+        {% if pln_rate %} 
+        <!-- Unpacking currencies and its pln ratio-->
+          {% for currency, rate in pln_rate.items() %}
+            <tr>
+              <td class="text-left p-1">{{currency}}</td>
+              <td>{{rate}}</td>
+            </tr>
+          {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-6 p-3">
+    <h6>Bitcoin price</h6>
+
+    <table class="bg-light table-bordered mx-auto" style="font-size: small;">
+      <thead>
+        <th class="p-2">Currency</th>
+        <th class="p-2">Bitcoin Price</th>
+      </thead>
+      <tbody>
+        {% if pln_rate %} 
+          <!-- Unpacking currencies and its pln ratio-->
+          {% for currency, price in bitcoins.items() %}
+            <tr>
+              <td class="text-left p-1">{{currency}}</td>
+              <td>{{price}}</td>
+            </tr>
+          {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock content %}

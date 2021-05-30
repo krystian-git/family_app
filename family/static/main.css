@@ -1,0 +1,54 @@
+/* expandable navbar sticked to the top */
+.site-header {
+    position: sticky;
+    top: 0px;        /* sticked to top */
+    z-index: 2;      /* to cover carousel indicators in movies_to_watch */
+
+}
+
+/* right bottom button */
+#new_note_btn {
+    position: fixed;
+    bottom: 0px;    /* sticked to bottom */
+    border: none;   /* Remove borders */
+    color: white; /* White text */
+    right: 0px;
+}
+#new_note_btn_only {
+    position: fixed;
+    bottom: 0px;    /* sticked to bottom */
+    border: none;   /* Remove borders */
+    color: white; /* White text */
+    left: 0px; /* sticked to left */
+}
+
+/* left bottom button */
+#new_list_btn, #new_movie_btn {
+    position: fixed;
+    left: 0px;      /* sticked to left */
+    bottom: 0px;    /* sticked to bottom */
+    border: none;   /* Remove borders */
+    color: white; /* White text */
+    height: 16px;
+}
+
+#new_list_btn, #new_movie_btn, #new_note_btn, #new_note_btn_only {
+    height: 50px;
+}
+
+/* set navbar(header), list's names and new list button same color */
+.navbar, .header-names, #new_list_btn, #new_movie_btn {
+    background-color: rgb(71, 103, 161);
+}
+
+.modal-body {
+    background-color: rgb(212, 214, 188);
+}
+
+/* get rid of margins and paddings in mobile view */
+@media only screen and (max-width: 500px) {
+    .body, .row, .container{
+        margin:0;
+        padding:0;
+        }
+}

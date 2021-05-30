@@ -1,0 +1,130 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<!-- Displaying errors -->
+<div class="col-12 mx-auto text-center">
+  {% for field in form_movie %}
+    {% if field.errors %}
+      {% for error in field.errors %}
+        <div class="alert alert-danger p-1 text-center">{{ field.data }}: {{ error }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+</div>
+
+ <!-- Modal for adding new movie -->
+<div class="modal fade" id="new_movie_modal" tabindex="-1" role="dialog" aria-labelledby="new_modal_movie" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <!-- Input for adding new movie's name -->
+    <form action='' method="POST">
+    {{ form_movie.hidden_tag() }}
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="new_modal_movie">Add New Movie</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body bg-warning">
+          <div class="form-group">
+            <input name="movie_name" id="movie_name" class="form-control form-control-lg" minlength="3" maxlength="30" required> 
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">Add</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="row justify-content-center">
+  <div class="col-12 pt-2">
+    <span style='font-family: Times New Roman, Times, serif;  font-size: large; font-weight: bold;'>Filmweb Recommend</span>
+  </div>
+</div>
+
+<div class="row">
+  {% if movies %}
+    <div id="carouselIndicators" class="carousel slide my-2 py-3 mx-auto" data-ride="carousel" style="width: 90%; border: solid black; background-color: rgb(218, 216, 216);">
+      <div class="carousel-inner data-interval=False" >
+        <!-- 1st ACTIVE movie in carousel-->
+        <div class="carousel-item active" style="height:450px">
+          <span><h4>{{ movies[0].title.span.text }}</h4></span>
+          <a href="{{movies[0].link}}" target="_blank">
+            <img class="d-block mx-auto" src="{{movies[0].image.a.img['src']}}" alt="First slide">
+          </a>
+          <span><h4 class="text-info"> Raiting: {{ movies[0].rate.text}} </h4></span>
+          <span>{{ movies[0].plot.text}}</span>
+        </div>
+        <!-- Movies in carousel starting from 2nd -->
+        {% for movie in movies[1:] %}
+          <div class="carousel-item" style="height: 450px;">
+            <h4>{{ movie.title.span.text }}</h4>
+            <a href="{{movie.link}}" target="_blank">
+              <img class="d-block mx-auto" src="{{movie.image.a.img['src']}}" alt="First slide">
+            </a>
+              <h4 class="text-info"> Raiting: {{ movie.rate.text}} </h4>
+            <span style="font-size: small;"> {{movie.plot.text}}</span>
+          </div>
+        {% endfor %}
+      </div>
+      <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next " href="#carouselIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+<div class="row">
+  <span class="bg-warning p-2 font-weight-bold">
+    Movies to watch
+  </span>
+</div>
+
+<div class="row">
+  <!-- Displaying movies to watch from database - Movie objects -->
+  <div class="col-12 col-md-6 m-0 p-0" style="background-color: rgb(20, 12, 12);">
+    <table class="borderless mx-auto">
+      <tbody>
+        <form action="" method="POST">
+          {{ form_delete_is_done.hidden_tag() }}
+          {% for movie_l in movie_list %}
+            <tr>
+              <td class="font font-italic text-white pr-2">{{movie_l.title}}</td>
+              <!-- Restricted view for ADMIN ONLY -->
+              {% if current_user.has_role('Admin') %}    
+                <td> 
+                  <!-- Remove event button -->
+                  <button type="submit" name="submit_delete" value="{{movie_l.title}}" class="btn btn-danger btn-sm">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                      <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                    </svg>              
+                  </button>
+                </td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+        </form>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-12 col-md-6 p-4 mb-2" style="text-align: justify;">
+    Labore sint non nisi est exercitation tempor dolor ullamco sunt dolor consectetur incididunt irure. Est commodo officia commodo ex aliqua cillum reprehenderit esse ut aliquip adipisicing dolore laborum cillum. Laborum velit sint voluptate ullamco cillum incididunt ullamco occaecat enim.
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-6">
+    <!-- Add new Movie button triggering Modal-->
+    <button class="btn rounded-0" name="Add movie" style="width:100%; font-size: x-large;" id="new_movie_btn" data-toggle="modal" data-target="#new_movie_modal">+ Movie</button>
+  </div>
+</div>
+
+{% endblock content %}

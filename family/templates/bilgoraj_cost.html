@@ -1,0 +1,145 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<!-- Displaying errors -->
+<div class="col-12 mx-auto text-center">
+  {% for field in form_room%}
+    {% if field.errors %}
+      {% for error in field.errors %}
+        <div class="alert alert-danger p-1 text-center">{{ field.data }}: {{ error }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+</div>
+
+ <!-- Modal for adding new room -->
+<div class="modal fade" id="new_room_modal" tabindex="-1" role="dialog" aria-labelledby="new_modal_room" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <!-- Input for adding new list's name -->
+    <form action='' method="POST">
+    {{ form_room.hidden_tag() }}
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-control-label">New Room</label> 
+            <input type=text name="new_room" class="form-control form-control-lg" minlength="3" maxlength="30" required> 
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          {{ form_room.submit_room(class="btn btn-success") }}<!-- Modal submitting new room button -->
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal for adding new item-->
+<div class="modal fade" id="new_item_modal" tabindex="-1" role="dialog" aria-labelledby="new_modal_item" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form action='' method="POST">
+      {{ form_item.hidden_tag() }}    
+        <div class="modal-header">
+          <h5 class="modal-title" id="new_modal_item">New Item</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="room_sellect">Select Room:</label>
+            <select class="form-control" id="room_sellect" name="room_sellect">
+              {% for room_list_choice in room_list %}
+                <option name='{{ room_list_choice.name }}'>{{ room_list_choice.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Item:</label>
+            <input class="form-control" id="message-text" name="new_item" minlength="3" maxlength="100" required>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Price:</label>
+            <input class="form-control" type="number" id="message-text" name="new_price" min="1" max="100000" step="1" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          <button type="submit" name="submit_item" class="btn btn-success">Add Item</button>
+        </div>
+      </form>    
+    </div>
+  </div>
+</div>
+
+<!-- Main content -->
+<div class="row">
+  <div class="col-xs-12 font-weight-light">
+    Biłgoraj House
+  </div>
+    
+  <!-- ROOMS -->
+  <!-- iterating over passed through rooms objects -->
+  {% for room in room_list %}
+    <div class="col-sm-12 col-md-6 col-xl-4 py-2">
+      <div class="card border-0 my-2">
+        <div class="card-header header-names text-center font-weight-bold text-white">
+          {{ room.name }}<!-- displaying room names-->
+        </div>
+        <table class="card-table" style="background-color: whitesmoke;">                
+          <tbody>
+            <!-- iterating over items in room -->
+            {% for item in room.item_or_service %}
+              <tr>
+                <form action='' method="POST">
+                  <td>
+                    {{ item.name }}
+                  </td>
+                  <td>
+                    {{ item.price }}
+                  </td>
+                  <td> 
+                    <!-- Restricted view for ADMIN ONLY -->
+                    {% if current_user.has_role('Admin') %}
+                      <!-- Remove Item Button -->
+                      <button type="submit" name="submit_delete" value="{{ item.id }}" class="btn btn-danger btn-sm">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                          <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                        </svg>              
+                      </button>
+                    {% endif %}
+                    <!-- End of Restricted view for ADMIN ONLY -->
+                  </td>
+                </form>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="card-footer bg-transparent">
+          Total Cost of room {{room.total_cost}}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Restricted view for ADMIN ONLY -->
+
+  {% if current_user.has_role('Admin') %}
+    <!-- 2 buttons sticked to bottom -->
+    <div class="col-xs-6">
+      <!-- Add new Room button-->
+      <button class="btn btn-info rounded-0" style="width: 50%; font-size: x-large;" id="new_list_btn" data-toggle="modal" data-target="#new_room_modal">+ Room</button>
+    </div>
+    <div class="col-xs-6">
+      <!-- Add new item button -->
+      <button class="btn btn-success rounded-0" style="width: 50%; font-size: x-large;" id="new_note_btn" data-toggle="modal" data-target="#new_item_modal"> + Item</button>
+    </div>
+  {% endif %}
+
+<!-- Restricted view for ADMIN ONLY -->
+
+{% endblock content %}
