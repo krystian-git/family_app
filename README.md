@@ -13,7 +13,7 @@ ___
 
 Every user can have Admin, Parent or Child role, which allows/deny him to access some data.
 
-![](./family_web_app/family/static/settings_app_screenshot.png)
+![](./family/static/settings_app_screenshot.png)
 
 You can also check pln to other top currencies rate (thanks NBP API) and Bitcoin price (thanks coindesk.com).
 
@@ -81,7 +81,6 @@ App will create default ( initial ) ADMIN user account with Admin rights, passwo
 
 ##### Author & homepage
 Krystian Polowy
-www.bitbucket.com/dfkdfdfd
-
+https://github.com/krystian-git/family_app
 ##### License
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
