@@ -9,7 +9,7 @@ As we renovating house I wanted to track cost of it and compare prices.
 I wanted to request filmweb API to get top movies, but there's NO such a thing. So decided to scrape few (you can set how many) movies of the day and display for us.
 ___
 
-![](./family_app/family/static/movie_app_screenshot.png?raw=true)
+![](./family/static/movie_app_screenshot.png?raw=true)
 
 Every user can have Admin, Parent or Child role, which allows/deny him to access some data.
 
